@@ -33,6 +33,7 @@ jobs:
           fail: true
         if: ${{ matrix.os == 'ubuntu' && matrix.node-version == 24 }}
       - run: npm run lint
+      - run: npm run check-pairing
       - run: npm run type
       - run: npm run unit
       - uses: codecov/codecov-action@v4
