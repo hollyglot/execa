@@ -23,7 +23,8 @@
 		"test": "npm run lint && npm run unit && npm run type",
 		"lint": "xo",
 		"unit": "c8 --merge-async ava",
-		"type": "tsd && tsc && npx --yes tsd@0.29.0 && npx --yes --package typescript@5.1 tsc"
+		"type": "tsd && tsc && npx --yes tsd@0.29.0 && npx --yes --package typescript@5.1 tsc",
+		"check-pairing": "node scripts/check-test-pairing.js"
 	},
 	"files": [
 		"index.js",
@@ -67,6 +68,7 @@
 	"devDependencies": {
 		"@types/node": "^22.15.21",
 		"ava": "^6.3.0",
+		"eslint-plugin-jsdoc": "^62.8.1",
 		"c8": "^10.1.3",
 		"get-node": "^15.0.3",
 		"is-in-ci": "^1.0.0",
@@ -97,9 +99,33 @@
 		"timeout": "240s"
 	},
 	"xo": {
+		"plugins": [
+			"jsdoc"
+		],
 		"rules": {
 			"unicorn/no-empty-file": "off",
-			"@typescript-eslint/ban-types": "off"
-		}
+			"@typescript-eslint/ban-types": "off",
+			"promise/catch-or-return": "error"
+		},
+		"overrides": [
+			{
+				"files": "index.js",
+				"rules": {
+					"jsdoc/require-jsdoc": [
+						"error",
+						{
+							"require": {
+								"FunctionDeclaration": true,
+								"FunctionExpression": true,
+								"ArrowFunctionExpression": true
+							},
+							"contexts": [
+								"ExportNamedDeclaration[declaration.type='VariableDeclaration']"
+							]
+						}
+					]
+				}
+			}
+		]
 	}
 }
